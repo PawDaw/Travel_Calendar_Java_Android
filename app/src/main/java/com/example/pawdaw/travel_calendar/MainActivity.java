@@ -6,6 +6,7 @@ import android.app.ListFragment;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -18,7 +19,6 @@ public class MainActivity extends AppCompatActivity {
 
     List_Fragment listFra;
 
-    DescriptionFragment desFra;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //    There is no guarantee, that onDestroy() is called, so call saveData() in onStop()!
     //  save to JSON before the activity is destroyed
     @Override
     protected void onDestroy() {
@@ -69,11 +70,48 @@ public class MainActivity extends AppCompatActivity {
         Service.getInstance().saveData(this);
     }
 
+    //  save to JSON on STOP Application
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Service.getInstance().saveData(this);
+    }
+
+
+    //   Address click LINK to google Website
     public void OnCLickAddres(View view) {
 
-        Intent search = new Intent(Intent.ACTION_WEB_SEARCH);
-        search.putExtra(SearchManager.QUERY, Service.getInstance().getTravels().get(listFra.getmCurCheckPosition()).getAddress());
-        startActivity(search);
+//        --------------  Google SEARCH ----------
+
+//        Intent search = new Intent(Intent.ACTION_WEB_SEARCH);
+//        search.putExtra(SearchManager.QUERY, Service.getInstance().getTravels().get(listFra.getmCurCheckPosition()).getAddress());
+//        startActivity(search);
+
+//       --------------  Google MAPS  ----------
+//        https://developers.google.com/maps/documentation/android-api/intents#intent_requests
+
+
+        // Create a Uri from an intent string. Use the result to create an Intent.
+//         Uri gmmIntentUri = Uri.parse("google.streetview:cbll=46.414382,10.013988");
+
+         // OR
+//        Uri gmmIntentUri = Uri.parse("geo:37.7749,-122.4194");
+
+        // OR
+//        Uri gmmIntentUri = Uri.parse("geo:37.7749,-122.4192?q=" + Uri.encode("1st & Pike, Seattle"));
+
+        // OR
+        // Search for restaurants nearby
+        Uri gmmIntentUri = Uri.parse("geo:0,0?q=restaurants");
+
+        // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+
+         // Make the Intent explicit by setting the Google Maps package
+         mapIntent.setPackage("com.google.android.apps.maps");
+
+         // Attempt to start an activity that can handle the Intent
+         startActivity(mapIntent);
 
     }
 }

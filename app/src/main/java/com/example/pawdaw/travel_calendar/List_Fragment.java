@@ -31,6 +31,7 @@ public class List_Fragment extends ListFragment {
     rowAdapter adapter;
 
     public int getmCurCheckPosition() {
+
         return mCurCheckPosition;
     }
 

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Travel_Calendar</string>
+    <string name="app_name">Travel Diary</string>
     <string name="action_settings" />
     <string name="add_note">Add</string>
 </resources>
